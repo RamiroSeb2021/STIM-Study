@@ -1,0 +1,59 @@
+---
+title: "Estudio — Series de Tiempo"
+output: html_notebook
+---
+
+# Unidad 1 — Getting started
+
+## Casos de estudio para ejercicios
+
+### Caso 3 — Valor de reventa de vehículos
+
+- Empresa compra vehículos nuevos, los alquila durante tres años y luego los vende.
+- Necesita mejores pronósticos de valores de reventa para controlar ganancias y definir políticas de alquiler y venta.
+- Cuenta con datos históricos de vehículos anteriores y sus valores finales de reventa.
+
+**Unidad de análisis:** cada vehículo vendido.
+
+#### Respuesta — ejercicio 1, caso 3
+
+El objetivo es pronosticar el valor final de reventa de cada vehículo, no la ganancia total de la flota. El horizonte de pronóstico es de tres años: la empresa compra un vehículo nuevo, lo alquila durante ese período y luego lo vende.
+
+Los datos de vehículos vendidos anteriormente, junto con sus valores finales de reventa, permiten aprender la relación entre características del vehículo y su valor futuro. Para un vehículo nuevo, pueden ser útiles predictores conocidos al momento de compra, por ejemplo:
+
+- marca, modelo y versión;
+- cilindraje;
+- tipo de combustible;
+- precio de compra o precio nuevo.
+
+También podrían influir kilometraje, siniestros y condiciones del mercado al momento de reventa. Sin embargo, al comprar el vehículo estos datos todavía son futuros e inciertos; solo pueden usarse directamente si se pronostica cerca de la venta o si se representan mediante escenarios o pronósticos propios.
+
+**Criterio central:** una variable es útil para pronosticar solo si está disponible antes de la fecha de corte. Los valores finales de reventa de vehículos anteriores son parte del historial de entrenamiento, no predictores observados del vehículo futuro.
+
+### Caso 4 — Tráfico aéreo semanal
+
+- Aerolínea necesita pronosticar número semanal de pasajeros por ruta doméstica y clase: económica, ejecutiva y primera.
+- Tiene seis años de datos históricos semanales.
+- Factores mencionados: vacaciones escolares, eventos deportivos, publicidad, comportamiento de competencia, huelga de pilotos, entrada y salida de aerolínea de bajo costo y cambios temporales en distribución de asientos.
+
+**Objetivo formulado:** pronosticar pasajeros semanales por ruta y clase para planificar capacidad y ventas.
+
+**Cuidado:** seis años describen historial disponible. Fecha de corte es último momento con información realmente conocida antes de hacer pronóstico.
+
+## Ejercicio 1
+
+> Para los casos 3 y 4 de la sección 1.5, listar posibles variables predictoras útiles, suponiendo que los datos relevantes estén disponibles.
+
+### Criterio para proponer variables
+
+1. Definir variable objetivo y horizonte de pronóstico.
+2. Considerar información disponible hasta fecha de corte.
+3. Para cada candidata, preguntar: ¿puede afectar objetivo?, ¿se conoce antes del pronóstico?, ¿tiene frecuencia temporal compatible?
+4. Evitar fuga de información: no usar valores observados después de fecha de corte.
+
+### Primeras ideas para revisar
+
+- Caso 3: características del vehículo y condiciones de mercado conocidas antes de venta.
+- Caso 4: calendario de vacaciones escolares y eventos conocidos antes de semana pronosticada.
+
+**Pendiente:** justificar por qué cada variable es disponible antes de fecha de corte y cómo se alinearía con ruta, clase y semana.
