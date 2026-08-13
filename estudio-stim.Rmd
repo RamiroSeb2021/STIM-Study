@@ -15,21 +15,6 @@ output: html_notebook
 
 **Unidad de análisis:** cada vehículo vendido.
 
-#### Respuesta — ejercicio 1, caso 3
-
-El objetivo es pronosticar el valor final de reventa de cada vehículo, no la ganancia total de la flota. El horizonte de pronóstico es de tres años: la empresa compra un vehículo nuevo, lo alquila durante ese período y luego lo vende.
-
-Los datos de vehículos vendidos anteriormente, junto con sus valores finales de reventa, permiten aprender la relación entre características del vehículo y su valor futuro. Para un vehículo nuevo, pueden ser útiles predictores conocidos al momento de compra, por ejemplo:
-
-- marca, modelo y versión;
-- cilindraje;
-- tipo de combustible;
-- precio de compra o precio nuevo.
-
-También podrían influir kilometraje, siniestros y condiciones del mercado al momento de reventa. Sin embargo, al comprar el vehículo estos datos todavía son futuros e inciertos; solo pueden usarse directamente si se pronostica cerca de la venta o si se representan mediante escenarios o pronósticos propios.
-
-**Criterio central:** una variable es útil para pronosticar solo si está disponible antes de la fecha de corte. Los valores finales de reventa de vehículos anteriores son parte del historial de entrenamiento, no predictores observados del vehículo futuro.
-
 ### Caso 4 — Tráfico aéreo semanal
 
 - Aerolínea necesita pronosticar número semanal de pasajeros por ruta doméstica y clase: económica, ejecutiva y primera.
@@ -51,9 +36,67 @@ También podrían influir kilometraje, siniestros y condiciones del mercado al m
 3. Para cada candidata, preguntar: ¿puede afectar objetivo?, ¿se conoce antes del pronóstico?, ¿tiene frecuencia temporal compatible?
 4. Evitar fuga de información: no usar valores observados después de fecha de corte.
 
-### Primeras ideas para revisar
+### Respuesta — ejercicio 1, caso 3
 
-- Caso 3: características del vehículo y condiciones de mercado conocidas antes de venta.
-- Caso 4: calendario de vacaciones escolares y eventos conocidos antes de semana pronosticada.
+El objetivo es pronosticar el valor final de reventa de cada vehículo, no la ganancia total de la flota. El horizonte de pronóstico es de tres años: la empresa compra un vehículo nuevo, lo alquila durante ese período y luego lo vende.
 
-**Pendiente:** justificar por qué cada variable es disponible antes de fecha de corte y cómo se alinearía con ruta, clase y semana.
+Los datos de vehículos vendidos anteriormente, junto con sus valores finales de reventa, permiten aprender la relación entre características del vehículo y su valor futuro. Para un vehículo nuevo, pueden ser útiles predictores conocidos al momento de compra, por ejemplo:
+
+- marca, modelo y versión;
+- cilindraje;
+- tipo de combustible;
+- precio de compra o precio nuevo.
+
+También podrían influir kilometraje, siniestros y condiciones del mercado al momento de reventa. Sin embargo, al comprar el vehículo estos datos todavía son futuros e inciertos; solo pueden usarse directamente si se pronostica cerca de la venta o si se representan mediante escenarios o pronósticos propios.
+
+**Criterio central:** una variable es útil para pronosticar solo si está disponible antes de la fecha de corte. Los valores finales de reventa de vehículos anteriores son parte del historial de entrenamiento, no predictores observados del vehículo futuro.
+
+### Respuesta — ejercicio 1, caso 4
+
+La variable objetivo es el número semanal de pasajeros para cada combinación de ruta doméstica y clase de pasajero:
+
+$$
+y_{t,r,c},
+$$
+
+donde $t$ representa la semana, $r$ la ruta y $c$ la clase —económica, ejecutiva o primera—. Por tanto, no hay una única serie temporal, sino varias series relacionadas. Sus valores también pueden agregarse para obtener totales por ruta, por clase o para toda la aerolínea.
+
+Los valores anteriores del número de pasajeros de cada serie podrían utilizarse como predictores autorregresivos. Además, serían potencialmente útiles las siguientes covariables:
+
+- vacaciones escolares en las ciudades de origen y destino;
+- eventos deportivos importantes en ambas ciudades;
+- campañas publicitarias de la aerolínea;
+- comportamiento de las aerolíneas competidoras;
+- presencia, entrada o salida de aerolíneas de bajo costo;
+- distribución y capacidad de asientos por clase;
+- huelgas, cancelaciones u otras interrupciones de la operación.
+
+Las vacaciones escolares deberían vincularse con las ciudades de origen y destino de cada ruta. Una representación inicial puede utilizar dos indicadores:
+
+$$
+x_{\text{origen},t}\in\{0,1\},
+\qquad
+x_{\text{destino},t}\in\{0,1\}.
+$$
+
+Esto permite distinguir cuatro situaciones: ninguna ciudad está de vacaciones, solo el origen, solo el destino o ambas ciudades. Antes de usar esta representación habría que definir cómo clasificar una semana en la que las vacaciones empiezan o terminan a mitad de semana.
+
+#### Disponibilidad de las covariables
+
+No todas las variables explicativas del pasado son igualmente útiles para pronosticar:
+
+- **Conocidas anticipadamente:** calendarios escolares, eventos programados, publicidad propia y cambios planificados en la distribución de asientos.
+- **Inciertas:** comportamiento futuro de la competencia y entrada o salida de aerolíneas, salvo que ya se hayan anunciado. Para utilizarlas sería necesario pronosticarlas o construir escenarios.
+- **Excepcionales:** huelgas y otras interrupciones poco frecuentes, asociadas con acontecimientos específicos y difíciles de anticipar.
+
+El criterio es determinar si el valor futuro de una covariable estará disponible al producir el pronóstico:
+
+$$
+\text{¿Se conocerá }x_{t+h}\text{ al calcular }\hat{y}_{t+h\mid t}\text{?}
+$$
+
+Finalmente, una huelga exige especial cuidado: un número de pasajeros cercano a cero puede deberse a que no hubo vuelos, no a que desapareciera la intención de viajar. En ese caso, el tráfico observado está restringido por la oferta y no mide directamente la demanda potencial:
+
+$$
+\text{pasajeros observados}\neq\text{demanda potencial}.
+$$
