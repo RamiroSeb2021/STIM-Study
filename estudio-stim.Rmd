@@ -100,3 +100,9 @@ Finalmente, una huelga exige especial cuidado: un número de pasajeros cercano a
 $$
 \text{pasajeros observados}\neq\text{demanda potencial}.
 $$
+
+## Gráficos de rezagos
+
+### Conclusión construida
+
+En producción trimestral de cerveza, el patrón estacional se repite cada cuatro trimestres. Por eso el gráfico con rezago $4$ muestra asociación positiva: compara el mismo trimestre de años consecutivos. El gráfico con rezago $2$ muestra asociación negativa porque suele comparar un pico de $Q4$ con un valle de $Q2$. Estas asociaciones describen repetición estacional; no prueban causalidad entre un trimestre y otro.
